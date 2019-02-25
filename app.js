@@ -3,7 +3,7 @@ var express=require("express"),
     mongoose=require("mongoose"),
     bodyParser=require("body-parser")
 //Array of objects
-app.connect("mongodb://localhost/books");
+mongoose.connect("mongodb://localhost/books");
 app.use(bodyParser.urlencoded({extended:true}))
 var bookSchema =new mongoose.Schema({
     name: String,
@@ -27,6 +27,7 @@ Book.create( {
           console.log("It didn't work");
           console.log(err)
       } else {
+          console.log("work")
           console.log(newbook)
       }
   }
@@ -83,32 +84,37 @@ app.get("/",function(req, res){
 
 //index route
 app.get("/books",function(req, res){
-   res.send("hi") 
-}) 
-  
-// post route
-app.post("/books",function(req, res){
-    
-  var name=req.body.name;
-  var author=req.body.author;
-  var image=req.body.image;
-  var dscp=req.body.description;
-  var obj={
-      name:name,
-      author:author,
-      dscp:dscp,
-      image:image
-  }
-  Book.create(obj,function(err, newbook){
+  Book.find({},function(err,books){
       if(err){
-          console.log("It didn't work");
           console.log(err)
-      } else {
-          res.redirect("/books")
+      } else{
+          res.render("index.ejs",{book:books})
       }
-  }
-) 
+  })
 })
+ 
+// post route
+ app.post("/books",function(req, res){
+    
+   var name=req.body.name;
+   var author=req.body.author;
+   var image=req.body.image;
+   var dscp=req.body.description;
+   var obj={       name:name,
+       author:author,
+       dscp:dscp,
+       image:image
+   }
+   Book.create(obj,function(err, newbook){
+       if(err){
+           console.log("It didn't work");
+           console.log(err)
+   } else {
+           res.redirect("/books")
+       }
+   }
+ ) 
+ })
 
 //new route
 app.get("/books/new",function(req, res){
