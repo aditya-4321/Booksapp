@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="main.css">-->
+    <!--<script src="main.js"></script>-->
+</head>
+<body>
+<h1>This is the show template</h1>
+<div class="container">
+    <div class="thumbnail">
+        <img src="<%= book.image%>" width="300" height="300">
+      <div class="caption"> 
+        <h2><%= book.name%></h2>
+        <h3><%= book.author%></h3>
+        <p><%= book.description%></p>
+        </div> 
+    </div>
+    <form action="/books/<%=book._id %>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+</div>
+</body>
+</html>

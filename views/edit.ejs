@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="main.css">-->
+    <!--<script src="main.js"></script>-->
+</head>
+<body>
+<h1>This is the show template</h1>
+<div class="container">
+       <form action="/books/<%= book._id %>?_method=PUT" method="POST">
+        <label > Name:
+                <input type="text" name="book[name]" value="<%=book.name%>">
+        </label>
+        
+        <label > author:
+                <input type="text" name="book[author]" value="<%=book.author%>">
+        </label>
+        <label > image:
+                <input type="text" name="book[image]" value="<%=book.image%>">
+        </label>
+        <label > description:
+                <input type="text" name="book[description]"value="<%=book.dscp%>">
+        </label>
+        <button>Submit</button>
+    </form>
+    </div>
+</div>
+</body>
+</html>

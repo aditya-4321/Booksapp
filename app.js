@@ -1,10 +1,13 @@
 var express=require("express"),
     app=express(),
     mongoose=require("mongoose"),
-    bodyParser=require("body-parser")
+    bodyParser=require("body-parser"),
+    methodOverride=require("method-override")
 //Array of objects
 mongoose.connect("mongodb://localhost/books");
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(methodOverride("_method"))
+app.set("view engine","ejs")
 var bookSchema =new mongoose.Schema({
     name: String,
     author: String,
@@ -17,21 +20,21 @@ var bookSchema =new mongoose.Schema({
 var Book=mongoose.model("Book", bookSchema)
 
 //Creating a book
-Book.create( {
-        name:"Infinity Countdown",
-        author:"Gerry Gudda",
-        image:"https://cdn1.thr.com/sites/default/files/2017/12/infinitycountdown-p_2017.jpg",
-        dscp:"TBack during the Time Runs Out storyline, the Infinity Gems were destroyed during the Incursion that affected the Multiverse.[2] When the Multiverse is restored by Mister Fantastic,[3] it enabled the Infinity Gems to be restored. When the Space Gem was the first to manifest, it was targeted by the Frost Giant Snarr on Loki's behalf. He was killed by a somehow-revived Wolverine who claimed the Space Gem"
-    },function(err, newbook){
-      if(err){
-          console.log("It didn't work");
-          console.log(err)
-      } else {
-          console.log("work")
-          console.log(newbook)
-      }
-  }
-) 
+// Book.create( {
+//         name:"Infinity Countdown",
+//         author:"Gerry Gudda",
+//         image:"https://cdn1.thr.com/sites/default/files/2017/12/infinitycountdown-p_2017.jpg",
+//         dscp:"TBack during the Time Runs Out storyline, the Infinity Gems were destroyed during the Incursion that affected the Multiverse.[2] When the Multiverse is restored by Mister Fantastic,[3] it enabled the Infinity Gems to be restored. When the Space Gem was the first to manifest, it was targeted by the Frost Giant Snarr on Loki's behalf. He was killed by a somehow-revived Wolverine who claimed the Space Gem"
+//     },function(err, newbook){
+//       if(err){
+//           console.log("It didn't work");
+//           console.log(err)
+//       } else {
+//           console.log("work")
+//           console.log(newbook)
+//       }
+//   }
+// ) 
 // var book=[
 //     {
 //         name:"Infinity Countdown",
@@ -119,6 +122,50 @@ app.get("/books",function(req, res){
 //new route
 app.get("/books/new",function(req, res){
    res.render("new.ejs")
+})
+
+//Show route
+app.get("/books/:id",function(req, res){
+    Book.findById(req.params.id,function(err, book){
+        if(err){
+            console.log(err)
+        } else {
+            res.render("show.ejs",{book: book})
+        } 
+    })
+   
+})
+
+app.get("/books/:id/edit",function(req, res){
+   Book.findById(req.params.id,function(err, book){
+       if(err){
+           console.log(err)
+       } else {
+           res.render("edit.ejs",{book: book})
+       } 
+   })
+})
+
+app.put("/books/:id",function(req, res){
+     Book.findByIdAndUpdate(req.params.id, req.body.book, function(err, newbook){
+         if(err){
+             console.log(err)
+         }
+         else{
+             res.redirect("/books/"+ req.params.id)
+       }
+    
+    })
+        
+})   
+app.delete("/books/:id",function(req, res){
+    Book.findByIdAndDelete(req.params.id, function(err){
+        if(err){
+            res.redirect("/books")
+        } else {
+            res.redirect("/books")
+        }
+    })
 })
 app.listen(process.env.PORT,process.env.IP,function(){
     console.log("Server has Started");
